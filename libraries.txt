@@ -1,0 +1,5 @@
+pip3 install polyglot
+pip3 install pyICU
+pip3 install pycld2
+pip3 install morfessor
+polyglot download embeddings2.en pos2.en
