@@ -2,4 +2,6 @@ pip3 install polyglot
 pip3 install pyICU
 pip3 install pycld2
 pip3 install morfessor
-polyglot download embeddings2.en pos2.en
+polyglot download embeddings2.fr pos2.fr #importante modificar para a lingua que deseja suportar
+pip3 install pandas
+pip3 install googletrans
