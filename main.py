@@ -1,6 +1,6 @@
 from polyglot.text import Text
 from pandas import DataFrame
-from googletrans import Translator
+from google_trans_new import google_translator
 
 
 class  FrenchPolyglot():
@@ -33,21 +33,25 @@ class  FrenchPolyglot():
         }
 
         self.word_list = []
-        self.classificationList = []
+        self.classification_list = []
         for tupla in range(len(self.tagged_text)):
             if self.tagged_text[tupla][0] in ["“", "”", "’", "-", ".",","] or self.tagged_text[tupla][1] == "PUNCT":
                 continue
             else:
+                self.classification_list.append(replaceTo[self.tagged_text[tupla][1]])
                 self.word_list.append(self.tagged_text[tupla][0])
-                self.classificationList.append(replaceTo[self.tagged_text[tupla][1]])
 
     def createDataframe(self):
         FrenchList = DataFrame(self.word_list, columns=["Français"])
-        FrenchList["Classe Gramatical"] = self.classificationList
-        translator = Translator()
-        #FrenchList["English"] = FrenchList["Français"].apply(translator.translate).apply(getattr, args=("text",))
-        FrenchList = FrenchList.drop_duplicates(subset="Français").sort_values(by="Français", )
-        print(FrenchList)
+        FrenchList["Classification"] = self.classification_list
+        self.FrenchList = FrenchList.drop_duplicates(subset="Français")
+    def translateTo(self):
+        translator = google_translator()
+        self.FrenchList["English"] = self.FrenchList["Français"].apply(translator.translate)
+        self.FrenchList["Deutch"] = self.FrenchList["Français"].apply(translator.translate, args=("de", "fr"))
+        self.FrenchList["Português"] = self.FrenchList["Français"].apply(translator.translate, args=("pt-br", "fr"))
+    def exports(self):
+        self.FrenchList.to_html('FrenchWordList.html')
     
 
 if __name__ == "__main__":
@@ -56,3 +60,5 @@ if __name__ == "__main__":
     objct.tagText()
     objct.lTupleToList()
     objct.createDataframe()
+    objct.translateTo()
+    objct.exports()
